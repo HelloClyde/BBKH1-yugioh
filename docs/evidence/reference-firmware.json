@@ -1,0 +1,195 @@
+{
+  "passed": true,
+  "bda_sha256": "0205b78eaff6ae4b77b091222fca9e54c6c5b6cdec04014428e56f0df7e6b31b",
+  "elf_sha256": "7fbaac1b6a7f7224ac40b6611066c9187c087193b5eab6d7f0ea08ef94855d59",
+  "physical_h1_tested": false,
+  "game_ram_written": false,
+  "production_sources_changed": false,
+  "ordinary_input_only": true,
+  "scope": "Exact final native BDA in its owned private complete H1 firmware: normal desktop launch, ELF section identity, menu/deck views, one unfiltered default-deck game, settlement, normal summon, opponent AI pause/resume, clean exit, audio counters/PCM and byte-exact save restoration. Does not claim every card was individually exercised in firmware.",
+  "desktop_launch": {
+    "passed": true,
+    "display": [
+      480,
+      272
+    ],
+    "code_identity_bytes": 498428
+  },
+  "menu_and_deck": {
+    "passed": true,
+    "main_fusion_side_owned_panes_verified": true,
+    "deck_unchanged": true,
+    "about_open_close_verified": true
+  },
+  "complete_duel": {
+    "passed": true,
+    "default_composition_confirmed": true,
+    "opening_unfiltered": true,
+    "first_controller": 0,
+    "winner": 1,
+    "turn": 18,
+    "commands": 148,
+    "input_count": 88,
+    "elapsed_host_seconds": 238.25,
+    "final_life": [
+      0,
+      2450
+    ],
+    "human_summoned_cards": [
+      24,
+      153,
+      239,
+      307,
+      515,
+      558,
+      823,
+      1099
+    ],
+    "heartbeat_stall_detected": false
+  },
+  "settlement": {
+    "passed": true,
+    "test_loss_delta": 1,
+    "native_save_restored_afterwards": true
+  },
+  "controls": {
+    "passed": true,
+    "successful_player_summon": 307,
+    "opponent_ai_paused_and_resumed": true,
+    "normal_exit_from_details": true,
+    "closed_status": 9,
+    "visuals_reviewed": true
+  },
+  "audio": {
+    "passed": true,
+    "sample_rate": 32000,
+    "game_volume_percent": 10,
+    "counter_deltas": {
+      "produced_frames": 13530472,
+      "consumed_frames": 13415784,
+      "effect_requests": 206,
+      "effect_plays": 206
+    },
+    "maximum_error_counters": {
+      "underruns": 0,
+      "codec_failures": 0,
+      "submit_failures": 0,
+      "last_error": 0
+    },
+    "pcm_samples_compared": 16384,
+    "pcm_mismatches": 0,
+    "device_released_after_exit": true,
+    "descriptors_initialized": 145,
+    "descriptors_destroyed": 145
+  },
+  "saves": {
+    "passed": true,
+    "original_pc_saves_unchanged_during_test": true,
+    "all_six_restored_byte_for_byte": true,
+    "restored_files": [
+      "/JOEY/JNAT0.SAV"
+    ]
+  },
+  "emulator_stopped": true,
+  "proofs": {
+    "deployment.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/deployment.json",
+      "sha256": "06e53fc56e706df7e9de07fed8f3c546a72d26e637411baa899bc3a6ffb92d4b"
+    },
+    "before-saves.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/before-saves.json",
+      "sha256": "94542a1de13af42d96b0339820d89efea0816ad3d245fa10178f85989bf33fb8"
+    },
+    "menu.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/menu.json",
+      "sha256": "02b2a5e4bb1ee922a8bdd1e581d19112989bc0a610240c08b36db81a44967f72"
+    },
+    "menu-deck-proof.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/menu-deck-proof.json",
+      "sha256": "ec16ae28908673a71f0d778c37ccb944e811d876d8a4833b4b6039a448dfae6e"
+    },
+    "code-identity.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/code-identity.json",
+      "sha256": "53a40231ca44f2ffeef2272b6756199758d5d2577e33e11f40d43a7a47444eab"
+    },
+    "full-duel/result.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/full-duel/result.json",
+      "sha256": "8c3e4064ae88e656deb714d00745f25de072faeb4998c471effd6492a8ac6fe7"
+    },
+    "settlement.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/settlement.json",
+      "sha256": "7b08a1185c751409ecf9d597d311d52166594007a55df6f530495bc2a9d53758"
+    },
+    "controls/result.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/controls/result.json",
+      "sha256": "1616b2d02515b68dd40d00b862c27c366d97c5b89b4f8e3cf95c22fd0a4b8ee7"
+    },
+    "audio-pcm.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/audio-pcm.json",
+      "sha256": "6276d20a0428b67542834a7c79314509c73e2c6af097b0124d5301ceb5d672c4"
+    },
+    "audio-pcm-volume-aware.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/audio-pcm-volume-aware.json",
+      "sha256": "7f7785fb0f0549f4078a7fd7cb5f807370fd86120799177d885465bca6c18d38"
+    },
+    "audio-pcm.ring.bin": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/audio-pcm.ring.bin",
+      "sha256": "213a0170cd82ca0093318b6bbfbbba1f3c0b32634dcb44057134f8cffef5a588"
+    },
+    "save-restoration.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/save-restoration.json",
+      "sha256": "8906366fcee8ed46f8bb93fb0714e983026e2b50ca0f2fe5ca8b3df2104f39c8"
+    },
+    "stopped-status.json": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/stopped-status.json",
+      "sha256": "ffae9b50c4fd90ce2396ffea10457e22bb4a03966920a35bb431c9b5dd2c2490"
+    }
+  },
+  "visuals_manually_reviewed": {
+    "after-launch.png": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/after-launch.png",
+      "sha256": "180ca38e1121bb789cd54d1960ff455903104b832d627ba024902c09595037f3"
+    },
+    "deck-main.png": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/deck-main.png",
+      "sha256": "98c5faf2198bbda85910589d4878b7a12a90e3197d4a1f1cfe0685cf926861b4"
+    },
+    "deck-fusion.png": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/deck-fusion.png",
+      "sha256": "d1fa09f1d96fae23e188eca5ed0b19e8d54525cd2f7ce7c33c781988ebd921d9"
+    },
+    "deck-owned.png": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/deck-owned.png",
+      "sha256": "b8ac7d6c022c98491584b273392dbed18d98c0969515a8940c8510a7a849a206"
+    },
+    "controls/chinese-details.png": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/controls/chinese-details.png",
+      "sha256": "c862917f851fa5ecc493e6ebd2543e3b3a3890f870f9414dabf2201625282ccd"
+    },
+    "controls/summoned.png": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/controls/summoned.png",
+      "sha256": "016ba32fae9a38c330178d995e841790b7b8893626451d7b76b958ad44d4eb69"
+    },
+    "controls/desktop-after-exit.png": {
+      "path": "build/h1-joey/h1-emulator/final-0205b78eaff6ae4b/controls/desktop-after-exit.png",
+      "sha256": "a1ed4ae04b3873362ae4084738f5dfd320a339a772cef0fd5a8b464a8ca484c8"
+    }
+  },
+  "test_method_adjustments": [
+    {
+      "legacy_method": "vendor SDK initial calibration wait 45 seconds",
+      "issue": "OS initial boot exceeded that timeout before reaching not-required status",
+      "resolution": "Continued normal boot and inputs without reset after API reported ready; no production change"
+    },
+    {
+      "legacy_method": "inspect_semantic_audio.py",
+      "issue": "Expected samples did not apply requested 10 percent game volume",
+      "resolution": "Retained raw failing observation and ring capture; independently applied original gain then C signed truncation at 10 percent, all16384 samples exact"
+    }
+  ],
+  "not_run": [
+    "Physical H1/USB operations",
+    "Individual full-firmware exercise of all1115 card records",
+    "Analog device audio playback"
+  ]
+}

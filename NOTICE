@@ -1,0 +1,15 @@
+BBKH1-yugioh — H1 native card game compatibility implementation
+Copyright 2026 HelloClyde and contributors.
+
+The Apache License 2.0 applies to the original application code, tools,
+tests and procedural open artwork in this repository. The sdk/ submodule
+has its own Apache License 2.0 and NOTICE, retained at its pinned commit.
+
+Yu-Gi-Oh!, Power of Chaos: Joey the Passion, its characters, artwork,
+music and original software belong to their respective rightsholders.
+This project is an independent, unofficial native implementation.
+The original program, extracted artwork/audio, translated resource packs,
+commercial fonts, firmware and personal saves are not distributed here.
+Reference screenshots depict third-party material and are documentation
+of interoperability testing; the code license does not license that material.
+See ASSET_SOURCES.md for the scope and provenance of individual inputs.

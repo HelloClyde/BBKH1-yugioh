@@ -1,0 +1,5 @@
+/* Only its own inherent hand procedure sets control_used before the summon
+ * negation window. Ordinary summons and revival never set this origin flag. */
+unsigned duel_gila_revival_options(const Duel *d,unsigned actor,DuelChoiceOption *options,unsigned capacity){return actor<2?pile_summon_candidates(d,1-actor,6,options,capacity):0;}
+static void gila_summon_trigger(Duel *d,unsigned side,unsigned index){DuelSlot *s=&d->players[side].monsters[index];if(!s->card||d->cards[s->card].name_group!=1520||!s->control_used)return;s->control_used=0;if(duel_gila_revival_options(d,side,0,0))queue_trigger(d,DUEL_TRIGGER_GILA,side,s->card,s->serial);}
+static int gila_ai_special_preferred(const Duel *d,unsigned side,unsigned card){if(d->cards[card].name_group!=1520||d->players[side].normal_summon_used)return 1;DuelChoiceOption options[DUEL_OPTION_MAX];unsigned n=duel_gila_revival_options(d,side,options,DUEL_OPTION_MAX);for(unsigned i=0;i<n;++i)if(d->cards[options[i].card].attack>d->cards[card].attack)return 0;return 1;}

@@ -1,0 +1,105 @@
+name: Native H1 build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2025
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e # v2, pinned 2026-10-24
+        id: host-cc
+        with:
+          msystem: UCRT64
+          update: true
+          install: mingw-w64-ucrt-x86_64-gcc
+      - name: Install Python libraries and pinned MIPS tools
+        shell: pwsh
+        run: |
+          python -m pip install -r requirements.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python tools/install_toolchain.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Verify tag version
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $expected = 'v' + (Get-Content VERSION -Raw).Trim()
+          if ($env:RELEASE_TAG -ne $expected) { throw "Tag must match VERSION: $expected" }
+      - name: Test, build twice, validate and package
+        shell: pwsh
+        env:
+          HOST_MSYS2: ${{ steps.host-cc.outputs.msys2-location }}
+        run: |
+          $hostCompiler = Join-Path $env:HOST_MSYS2 'ucrt64/bin/gcc.exe'
+          python tools/ci.py --cc $hostCompiler
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: BBKH1-yugioh-${{ github.sha }}
+          path: dist/*
+          if-no-files-found: error
+          archive: true
+          retention-days: 14
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: verification-${{ github.sha }}
+          path: |
+            build/ci-verification.json
+            build/host/tests.json
+            build/mips-tests/profile/tests.json
+            build/native/validation.json
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: BBKH1-yugioh-${{ github.sha }}
+          path: dist
+          digest-mismatch: error
+      - name: Check exact build artifact files
+        run: python3 tools/verify_dist.py
+      - name: Publish new prerelease without replacing assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing to replace published assets.' >&2
+            exit 1
+          fi
+          gh release create "$RELEASE_TAG" --verify-tag --prerelease \
+            --title "游戏王 H1 $RELEASE_TAG" --notes-file dist/RELEASE_NOTES.md \
+            dist/JOEY.bda dist/*-code-only.zip dist/build-manifest.json dist/RELEASE_NOTES.md dist/SHA256SUMS.txt

@@ -1,0 +1,4 @@
+/* Original Dark Necrofear's End job survives its departure chain. It is
+ * consumed at this End even when no target/backrow can be used. */
+static void necro_schedule(Duel *d,unsigned actor,unsigned card,uint32_t serial){unsigned at=revival_job_space(d);if(at<64)d->revival_jobs[at]=(DuelRevivalJob){serial,d->event_sequence,card,d->turn,actor,1,0,1};}
+static void necro_end_queue(Duel *d){for(;;){unsigned best=64;for(unsigned i=0;i<64;++i){const DuelRevivalJob *j=&d->revival_jobs[i];if(j->used&&j->kind==1&&j->due_turn<=d->turn&&(best==64||j->order<d->revival_jobs[best].order))best=i;}if(best==64)return;DuelRevivalJob j=d->revival_jobs[best];clear(&d->revival_jobs[best],sizeof(j));if(grave_index(&d->players[j.actor],j.serial)<0)continue;queue_trigger(d,DUEL_CHOICE_EQUIP_RECYCLE,j.actor,j.card,j.serial);return;}}

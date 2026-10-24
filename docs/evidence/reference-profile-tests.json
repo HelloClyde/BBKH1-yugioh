@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "checks": 4690,
+  "failures": 0,
+  "first_failed_check": 0,
+  "first_failed_source_line": 0,
+  "elf_sha256": "7d19d0afae6c00216510040d4e77505eb0b1679a033714ddf467f5cc5b9d01cf",
+  "source_hashes": {
+    "h1-joey\\runtime\\mini.c": "0b9d3dbe3b9fe2b3089a455ddc59977a372fff9b7a933e862bb5a80951d5835a",
+    "h1-joey\\runtime\\duel.c": "917771e781e97fef99df88ae201d99e47cfa0c965f2db9c50a664cd589efb918",
+    "h1-joey\\runtime\\duel_profile.c": "762e88da7ad9117347b01da95f357f3189274966df2431199d1a73ff0f9a994b",
+    "h1-joey\\tools\\native_profile_test.c": "f6c444e05fea50a6e10871f91340df65dada0fd70c900aa4f4943b78a83a7b55",
+    "h1-joey\\runtime\\duel.h": "51d254b10462bf1c56a0f9c69f8e1f0376e95fc2d419df010e33f63ce754ab18",
+    "h1-joey\\runtime\\duel_profile.h": "ecce0665d3ffc719fa00aabf92ca08a2bdcb6137965d7b2232a5e6b7fe3f70c4",
+    "build\\h1-joey\\native-engine\\duel_cards.h": "fb04796ed4f2ce06dda205054b97b66bd9b7c7f38c42a1e26265359339c376c4",
+    "build\\h1-joey\\native-engine\\original_reward_cases.h": "620091b8072806c0acfb6a9746e557eb1ce4ed487459000eee115e3fc931af81",
+    "build\\h1-joey\\native-engine\\duel_profile_v2_fixture.h": "1a74bc370de50d1f0d49aff91d1a789360657d1e28e6287a7e7928f004a08c77",
+    "h1-joey\\tools\\native_profile_reserved_test.inc": "be1b8467403c1c4b9c841738c3e76b5459bcd17a6c7c5033d836d4ebe99a47e4"
+  },
+  "scope": "Production profile codec, ownership and same-name quotas, corrupt/truncated save rejection, slot selection and actual edited-deck native opening on MIPS CPU model",
+  "firmware_tested": false,
+  "physical_h1_tested": false,
+  "original_executable_loaded": false
+}

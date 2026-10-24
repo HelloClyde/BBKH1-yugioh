@@ -1,0 +1,43 @@
+{
+  "bda_sha256": "0205b78eaff6ae4b77b091222fca9e54c6c5b6cdec04014428e56f0df7e6b31b",
+  "bda_bytes": 529280,
+  "elf_sha256": "7fbaac1b6a7f7224ac40b6611066c9187c087193b5eab6d7f0ea08ef94855d59",
+  "icon_region": {
+    "offset": 136,
+    "bytes": 30676,
+    "sha256": "9d5e66cdcb06b86b5d486bcb987653e76c18b47b8272a0d065c72e5adad91201"
+  },
+  "attack_region": {
+    "offset": 496132,
+    "bytes": 9940,
+    "sha256": "93dd504b880cd9d876856d1c49963c605b10bc996217474cbe6da8a04ecbced1"
+  },
+  "font": {
+    "bytes": 3584125,
+    "glyphs_per_book": 2154,
+    "books": 25
+  },
+  "files": {
+    "FONT.BIN": {
+      "bytes": 3584125,
+      "sha256": "4edf0bcf93137097cc0441b6cd1f6efb84248ca25a9373e2feda542d3ea7c23a"
+    },
+    "H1ART.PAK": {
+      "bytes": 801200,
+      "sha256": "a110ab5350b4409406cfc352f92589e6857ee3781e26f702ea62d0ea23363d48"
+    },
+    "H1SCN.PAK": {
+      "bytes": 522272,
+      "sha256": "1cdbc5e4df2e3b5668cb37f201a26d9d8f100c7748bf582ba8d082a6afbdd0d8"
+    },
+    "H1SND.PAK": {
+      "bytes": 14551040,
+      "sha256": "a5b5ffa3e19857f4a1bf4ee97373bf1d599cd1436e6996b6da6d0523c36e394e"
+    },
+    "H1UI.PAK": {
+      "bytes": 12617296,
+      "sha256": "0e6c8971488af4c6cc4ce61dbfd8ef95b4ee7cd69b6c88b13a30f99ba408d1ec"
+    }
+  },
+  "resources_not_redistributed": true
+}

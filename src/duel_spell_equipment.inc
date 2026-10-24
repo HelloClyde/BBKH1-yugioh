@@ -1,0 +1,4 @@
+/* Mask of Dispel uses the original kind2 relation to another Spell-zone
+ * card, including a Monster currently used as equipment. */
+static int spell_equipment_target(const Duel *d,unsigned side,unsigned index){if(!d||side>1||index>DUEL_FIELD_SLOT)return 0;const DuelSlot *s=index==DUEL_FIELD_SLOT?&d->players[side].field:&d->players[side].backrow[index];return s->card&&s->position!=DUEL_FACEDOWN_DEFENSE&&d->cards[s->card].family!=DUEL_TRAP;}
+static int spell_equipment_host(const Duel *d,uint32_t serial,unsigned *side,unsigned *index){if(!serial)return 0;for(unsigned p=0;p<2;++p)for(unsigned i=0;i<=DUEL_FIELD_SLOT;++i){const DuelSlot *s=i==DUEL_FIELD_SLOT?&d->players[p].field:&d->players[p].backrow[i];if(s->serial==serial&&spell_equipment_target(d,p,i)){if(side)*side=p;if(index)*index=i;return 1;}}return 0;}

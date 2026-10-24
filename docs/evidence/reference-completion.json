@@ -1,0 +1,26 @@
+{
+  "complete": true,
+  "all_effects_implemented": true,
+  "records": 1115,
+  "missing_definitions": 0,
+  "native_checks": 1454892,
+  "failures": 0,
+  "host_seconds": 1.6103079000022262,
+  "complete_ai_games": 2080,
+  "mips_profile_checks": 4690,
+  "bda_sha256": "0205b78eaff6ae4b77b091222fca9e54c6c5b6cdec04014428e56f0df7e6b31b",
+  "elf_sha256": "7fbaac1b6a7f7224ac40b6611066c9187c087193b5eab6d7f0ea08ef94855d59",
+  "h1_firmware_tested": true,
+  "physical_h1_tested": false,
+  "physical_install_deferred": "User requested preserving the foreground physical-device game.",
+  "native_execution": true,
+  "original_bug_compatibility": "Preserve confirmed original behavior, including old-coordinate callbacks and original lookup defects.",
+  "scope": "All original card-effect families implemented; pinned original-code differential probes, full host/native MIPS regression and independent firmware gameplay passed. These bounded checks do not claim exhaustive enumeration of every possible interaction.",
+  "proofs": {
+    "build\\h1-joey\\all-card-effects\\batch121-verified\\host-tests.json": "2268770cabeac013bbaa39c007d1721d3b2cf773781a035bd06a23e77199959e",
+    "build\\h1-joey\\all-card-effects\\batch121-verified\\mips-tests.json": "ae9b88184464e70b70d92087374fa6112d59b391281ce7073584f2a427804a5c",
+    "build\\h1-joey\\all-card-effects\\batch121-verified\\coverage.json": "8cdee81b2b74f34405360328e983a61e326aa83cb3a5f00fa525750320ab6236",
+    "build\\h1-joey\\all-card-effects\\batch121-verified\\profile-tests.json": "e8a40568c6dd998c8a4732978416f905ca6adca8f7875aa1d4172d9c9cfadbae",
+    "build\\h1-joey\\h1-emulator\\final-0205b78eaff6ae4b\\final-firmware-validation.json": "79605a32d0d46e6b6d76159663f9cd5d0fa5457fc517a5726ad9fa1706240002"
+  }
+}

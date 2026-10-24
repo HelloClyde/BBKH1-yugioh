@@ -1,0 +1,38 @@
+#include "original_offering_cases.h"
+volatile uint32_t native_offering_test_result[6];
+static void offering_fixture(unsigned side){pair_fixture(side);test_game.players[side].hand_count=0;contact_test_hand(side,0,77,100);expansion_place(side,0,1017);test_game.players[side].backrow[0].serial=300;}
+static void offering_tests(void){unsigned initial=checks,matrix=0,reference=0;DuelCommand c;
+    for(unsigned n=0;n<sizeof(original_offering_mask_cases)/sizeof(original_offering_mask_cases[0]);++n){const int *v=original_offering_mask_cases[n];unsigned side=v[0],card=v[1];if(!card||!duel_card_supported(&duel_card_definitions[card])){++reference;continue;}pair_fixture(side);test_game.players[side].hand_count=1;test_game.players[side].hand[0]=card;for(unsigned i=0;i<3;++i){test_game.players[side].monsters[i]=slot(simple_record(77),side,0);test_game.players[side].monsters[i].serial=200+i;}unsigned actual=duel_offering_forms(&test_game,side,0);
+#ifdef _WIN32
+if(actual!=(unsigned)v[2])fprintf(stderr,"mask name%u card%u actual%u expected%u\n",test_game.cards[card].name_group,card,actual,v[2]);
+#endif
+check(actual==(unsigned)v[2]);++matrix;}
+    for(unsigned n=0;n<sizeof(original_offering_gate_cases)/sizeof(original_offering_gate_cases[0]);++n){const int *v=original_offering_gate_cases[n];unsigned side=v[0];offering_fixture(side);test_game.active=v[1];test_game.phase=v[2];test_game.players[side].hand_count=v[4];test_game.players[side].normal_summon_used=v[5];if(v[6]){test_game.summon_ban_turn[side]=test_game.turn;test_game.summon_ban_mask[side]=1;}DuelSlot *source=&test_game.players[side].backrow[0];source->position=v[3]?0:2;source->effect_active=v[3];if(v[3]){c=(DuelCommand){side,DUEL_ACTION_ACTIVATE_BACKROW,0};int result=duel_command(&test_game,&c);
+#ifdef _WIN32
+if((result==DUEL_OK)!=(v[7]==2))fprintf(stderr,"gate actor%u active%d phase%d virtual%d hand%d used%d ban%d result%d expected%d\n",side,v[1],v[2],v[3],v[4],v[5],v[6],result,v[7]);
+#endif
+check((result==DUEL_OK)==(v[7]==2));if(v[7]==2){pass_chain();check(test_game.choice.kind==DUEL_CHOICE_OFFERING_HAND&&test_game.players[side].life==7500);}}else{if(side!=test_game.active&&test_game.phase!=DUEL_BATTLE){++reference;continue;}c=(DuelCommand){side,DUEL_ACTION_ACTIVATE_BACKROW,0};check(duel_command(&test_game,&c)==DUEL_OK);
+#ifdef _WIN32
+if((test_game.choice.kind==DUEL_CHOICE_OFFERING_PAY)!=(v[7]==2))fprintf(stderr,"offer actor%u active%d phase%d hand%d used%d ban%d choice%u expected%d\n",side,v[1],v[2],v[4],v[5],v[6],test_game.choice.kind,v[7]);
+#endif
+check((test_game.choice.kind==DUEL_CHOICE_OFFERING_PAY)==(v[7]==2));}++matrix;}
+    for(unsigned n=0;n<sizeof(original_offering_body_cases)/sizeof(original_offering_body_cases[0]);++n){const int *v=original_offering_body_cases[n];unsigned side=v[0];offering_fixture(side);magnet_hold(side);c=(DuelCommand){side,DUEL_ACTION_ACTIVATE_BACKROW,0};check(duel_command(&test_game,&c)==DUEL_OK&&test_game.chain_count==1);DuelSlot *source=&test_game.players[side].backrow[0];source->card=v[1]?simple_record(v[1]):0;source->position=v[2]==1?2:0;source->serial=v[3];test_game.chain[0].effect_negated=v[4]!=0;test_game.chain[0].command.cost=v[5];if(v[6])expansion_place(1-side,3,1033);pass_chain();check((test_game.choice.kind==DUEL_CHOICE_OFFERING_HAND)==v[7]);++matrix;}
+    for(unsigned n=0;n<sizeof(original_offering_budget_cases)/sizeof(original_offering_budget_cases[0]);++n){const int *v=original_offering_budget_cases[n];unsigned side=v[0];offering_fixture(side);test_game.players[side].normal_summon_used=v[1];c=(DuelCommand){side,DUEL_ACTION_ACTIVATE_BACKROW,0};check(duel_command(&test_game,&c)==DUEL_OK);
+pass_chain();
+check(test_game.choice.kind==DUEL_CHOICE_OFFERING_HAND);c=(DuelCommand){side,DUEL_ACTION_CHOOSE,0};check(duel_command(&test_game,&c)==DUEL_OK&&test_game.choice.kind==DUEL_CHOICE_OFFERING_FORM);c.source=v[2];check(duel_command(&test_game,&c)==DUEL_OK&&test_game.choice.kind==DUEL_CHOICE_OFFERING_ZONE);c.source=0;check(duel_command(&test_game,&c)==DUEL_OK);contact_test_finish();check(test_game.players[side].normal_summon_used==v[3]&&test_game.summon_activity[side]==v[4]);check(test_game.players[side].monsters[0].card==simple_record(77)&&test_game.players[side].monsters[0].serial==100&&test_game.players[side].monsters[0].position==(v[2]?2:0)&&!test_game.players[side].monsters[0].special_summon_marker);++matrix;}
+    for(unsigned side=0;side<2;++side){
+        /* A first activation can decline its optional fee and stay face-up. */
+        offering_fixture(side);test_game.players[side].backrow[0].position=2;test_game.players[side].backrow[0].effect_active=0;check(command(DUEL_ACTION_ACTIVATE_BACKROW,0,0,0,0,0)==DUEL_OK&&test_game.choice.kind==DUEL_CHOICE_OFFERING_PAY);check(command(DUEL_ACTION_CHOOSE,DUEL_NO_SLOT,0,0,0,0)==DUEL_OK);contact_test_finish();check(test_game.players[side].life==8000&&test_game.players[side].backrow[0].effect_active&&!test_game.players[side].monsters[0].card);
+        /* The face-up ability pays before the chain. Destruction loses its
+         * fee, and no hand card or normal allowance has been consumed. */
+        offering_fixture(side);magnet_hold(side);check(command(DUEL_ACTION_ACTIVATE_BACKROW,0,0,0,0,0)==DUEL_OK&&test_game.players[side].life==7500);test_game.players[side].backrow[0].card=0;pass_chain();check(!test_game.choice.kind&&test_game.players[side].hand_count==1&&!test_game.players[side].normal_summon_used);
+        /* Life must exceed500;501 leaves1 and can still summon. */
+        for(unsigned life=500;life<=501;++life){offering_fixture(side);test_game.players[side].life=life;int r=command(DUEL_ACTION_ACTIVATE_BACKROW,0,0,0,0,0);check((r==DUEL_OK)==(life==501));if(life==501){contact_test_finish();check(test_game.players[side].life==1&&test_game.players[side].monsters[0].card);}}
+        /* The full field is freed by the selected tribute; its Sangan
+         * trigger runs after the ordinary tribute summon succeeds. */
+        offering_fixture(side);test_game.players[side].hand[0]=simple_record(34);for(unsigned i=0;i<5;++i){test_game.players[side].monsters[i]=slot(simple_record(i?77:47),side,0);test_game.players[side].monsters[i].serial=200+i;}check(command(DUEL_ACTION_ACTIVATE_BACKROW,0,0,0,0,0)==DUEL_OK);contact_test_finish();unsigned found=0;for(unsigned i=0;i<5;++i)found+=test_game.players[side].monsters[i].card==simple_record(34);check(found==1&&test_game.players[side].grave_count>=1&&!test_game.players[side].normal_summon_used&&identity_unique(&test_game));
+    }
+    uint16_t deck[44];for(unsigned i=0;i<40;++i)deck[i]=duel_original_deck[i];deck[40]=deck[41]=simple_record(1017);deck[42]=deck[43]=simple_record(34);unsigned completed=0,activations=0;
+    for(unsigned seed=0;seed<10;++seed){check(duel_start(&test_game,duel_card_definitions,deck,44,deck,44,12500+seed,seed&1)==DUEL_OK);check(duel_equip_setup(&test_game,duel_equip_rules,DUEL_EQUIP_RULE_COUNT)==DUEL_OK);unsigned actions=0;while(test_game.winner<0&&actions++<7000){check(duel_ai_decide(&test_game,decision_player(),&c));activations+=c.action==DUEL_ACTION_ACTIVATE_BACKROW&&c.source<5&&test_game.cards[test_game.players[c.player].backrow[c.source].card].name_group==1017;int r=duel_command(&test_game,&c);check(r==DUEL_OK);if(r!=DUEL_OK)break;check(owned_cards(&test_game,0)==44&&owned_cards(&test_game,1)==44);check(identity_unique(&test_game));}check(test_game.winner>=0);completed+=test_game.winner>=0;}check(completed==10);native_offering_test_result[2]=completed;native_offering_test_result[3]=activations;
+    native_offering_test_result[0]=checks-initial;native_offering_test_result[1]=matrix;native_offering_test_result[4]=reference;
+}

@@ -1,0 +1,14 @@
+/* Shared tribute permission, keyed by the actual field instance. Soul
+ * Exchange uses the original's ordered association lookup. */
+int duel_can_tribute(const Duel *d,unsigned actor,unsigned owner,unsigned index){if(!d||actor>1||owner>1||index>=5||continuous_count(d,5))return 0;const DuelSlot *s=&d->players[owner].monsters[index];if(!s->card)return 0;if(actor==owner)return 1;for(unsigned i=0;i<d->tribute_grant_count;++i){const DuelTributeGrant *g=&d->tribute_grants[i];if(g->target!=s->serial||(g->kind!=3&&g->kind!=13)||(g->until&&g->until<d->turn))continue;return g->actor==actor;}return 0;}
+int duel_can_normal_tribute(const Duel *d,unsigned actor,unsigned owner,unsigned index){if(!duel_can_tribute(d,actor,owner,index))return 0;unsigned name=d->cards[d->players[owner].monsters[index].card].name_group;return name!=1921&&name!=1922;}
+static unsigned normal_tribute_available(const Duel *d,unsigned actor){unsigned count=0;for(unsigned owner=0;owner<2;++owner)for(unsigned i=0;i<5;++i)count+=duel_can_normal_tribute(d,actor,owner,i);return count;}
+static unsigned tribute_owner(unsigned actor,unsigned token){return actor^(token/5);}
+static const DuelSlot *tribute_monster(const Duel *d,unsigned actor,unsigned token){return token<10?&d->players[tribute_owner(actor,token)].monsters[token%5]:0;}
+static unsigned tribute_available(const Duel *d,unsigned actor){unsigned count=0;for(unsigned token=0;token<10;++token)count+=duel_can_tribute(d,actor,tribute_owner(actor,token),token%5);return count;}
+static void tribute_pay_mask(Duel *d,unsigned actor,unsigned mask){for(unsigned token=0;token<10;++token)if(mask&(1u<<token))leave_field(d,tribute_owner(actor,token),token%5,0,LEAVE_TRIBUTE);}
+static void tribute_add_grant(Duel *d,uint32_t serial,unsigned actor,unsigned kind,unsigned until){unsigned n=0;for(unsigned i=0;i<d->tribute_grant_count;++i){const DuelTributeGrant *g=&d->tribute_grants[i];unsigned present=0;for(unsigned p=0;p<2;++p)for(unsigned j=0;j<5;++j)present|=d->players[p].monsters[j].card&&d->players[p].monsters[j].serial==g->target;if(present&&(!g->until||g->until>=d->turn))d->tribute_grants[n++]=*g;}d->tribute_grant_count=n;if(n<DUEL_TRIBUTE_GRANT_MAX)d->tribute_grants[d->tribute_grant_count++]=(DuelTributeGrant){serial,until,actor,kind};}
+static int tribute_spell_immune(const Duel *d,unsigned owner,unsigned index){return duel_spell_immune(d,owner,index);}
+static void soul_exchange_resolve(Duel *d,const DuelChainLink *link){unsigned side=link->command.player,owner=link->command.target_player,index=link->command.target;if(owner>1||index>=5)return;DuelSlot *s=&d->players[owner].monsters[index];/* Original583510 checks the physical zone before its UID decoder. */
+    if(big_shield_intercept(d,link))return;
+    d->battle_skip_turn[side]=d->turn;if(!link->effect_negated&&!duel_field_effect_negated(d,link->card)&&s->card&&s->serial==link->target_serial)tribute_add_grant(d,s->serial,side,3,d->turn);}

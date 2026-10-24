@@ -1,0 +1,14 @@
+#include "original_zebra_cases.h"
+volatile uint32_t native_zebra_test_result[5];
+static void zebra_tests(void){unsigned initial=checks,matrix=0,excluded=0,zebra=simple_record(1113);
+    for(unsigned i=0;i<sizeof(original_zebra_cases)/sizeof(original_zebra_cases[0]);++i){const unsigned *v=original_zebra_cases[i];if(v[5]||!v[4]){++excluded;continue;}reset();test_game.turn=3;test_game.active=v[1];test_game.phase=DUEL_DRAW;test_game.players[0].hand_count=test_game.players[1].hand_count=0;DuelPlayer *p=&test_game.players[v[1]];p->monsters[v[2]]=slot(zebra,v[1],v[3]);for(unsigned j=0,n=1;j<5&&n<v[4];++j)if(j!=v[2]){p->monsters[j]=slot(24,v[1],n&1?DUEL_FACEDOWN_DEFENSE:DUEL_FACEUP_ATTACK);++n;}check(command(DUEL_ACTION_PHASE,0,0,DUEL_MAIN1,0,0)==DUEL_OK&&test_game.phase==DUEL_MAIN1&&!test_game.chain_count&&!test_game.choice.kind);check(p->monsters[v[2]].position==(v[6]?DUEL_FACEUP_DEFENSE:v[3])&&p->monsters[v[2]].position_lock_until==(v[6]?3:0));if(v[6]){uint32_t before=duel_state_hash(&test_game);check(command(DUEL_ACTION_POSITION,v[2],0,0,DUEL_FACEUP_ATTACK,0)==DUEL_NOT_ALLOWED&&duel_state_hash(&test_game)==before);test_game.turn=5;check(command(DUEL_ACTION_POSITION,v[2],0,0,DUEL_FACEUP_ATTACK,0)==DUEL_OK);}++matrix;}
+    /* The opponent's Standby cannot change this side's Zebra. */
+    zero_ignition_fixture(0,zebra);test_game.active=1;test_game.phase=DUEL_DRAW;check(command(DUEL_ACTION_PHASE,0,0,DUEL_MAIN1,0,0)==DUEL_OK&&test_game.players[0].monsters[0].position==DUEL_FACEUP_ATTACK&&!test_game.players[0].monsters[0].position_lock_until);
+    uint16_t deck[48];for(unsigned i=0;i<42;++i)deck[i]=duel_original_deck[i];for(unsigned i=0;i<6;++i)deck[42+i]=zebra;unsigned completed=0,actions_total=0;
+    for(unsigned seed=1;seed<=20;++seed){check(duel_start(&test_game,duel_card_definitions,deck,48,deck,48,seed+2800,seed&1)==DUEL_OK);check(duel_fusion_setup(&test_game,duel_fusion_recipes,DUEL_FUSION_RECIPE_COUNT,duel_original_fusion_deck,1,duel_original_fusion_deck,1)==DUEL_OK);check(duel_equip_setup(&test_game,duel_equip_rules,DUEL_EQUIP_RULE_COUNT)==DUEL_OK);unsigned actions=0;while(test_game.winner<0&&actions++<5000){DuelCommand a;check(duel_ai_decide(&test_game,decision_player(),&a));int result=duel_command(&test_game,&a);
+#ifdef _WIN32
+        if(result!=DUEL_OK)fprintf(stderr,"zebra seed %u action %u source %u result %d\n",seed,a.action,a.source,result);
+#endif
+        check(result==DUEL_OK);check(owned_cards(&test_game,0)==49&&owned_cards(&test_game,1)==49);}check(test_game.winner>=0);completed+=test_game.winner>=0;actions_total+=actions;}
+    check(completed==20);native_zebra_test_result[0]=checks-initial;native_zebra_test_result[1]=matrix;native_zebra_test_result[2]=completed;native_zebra_test_result[3]=excluded;native_zebra_test_result[4]=actions_total;
+}

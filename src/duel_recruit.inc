@@ -1,0 +1,9 @@
+#include "duel_recruit_data.h"
+static const RecruitRule *recruit_rule(const Duel *d,unsigned card){if(d->cards[card].effect!=DUEL_E_RECRUIT)return 0;for(unsigned i=0;i<DUEL_RECRUIT_RULE_COUNT;++i)if(recruit_rules[i].name==d->cards[card].name_group)return &recruit_rules[i];return 0;}
+static unsigned recruit_options(const Duel *d,unsigned side,unsigned source,DuelChoiceOption *out,unsigned capacity){const RecruitRule *r=recruit_rule(d,source);const DuelPlayer *p=&d->players[side];unsigned count=0;if(!special_summon_allowed_for(d,side)||!r||empty_zone(p->monsters)<0)return 0;
+    for(unsigned i=0;i<p->deck_count;++i){unsigned card=p->deck[i];const DuelCardDef *c=&d->cards[card];if(c->family!=DUEL_MONSTER||c->subtype>=2||c->attribute!=r->attribute||c->attack>1500||!duel_card_supported(c)||c->name_group==55||c->name_group==727||(c->name_group>=1910&&c->name_group<=1912))continue;if(out&&count<capacity)out[count]=(DuelChoiceOption){card,i,DUEL_OPTION_CARD};++count;}
+    if(count){if(out&&count<capacity)out[count]=(DuelChoiceOption){0,DUEL_NO_SLOT,DUEL_OPTION_SKIP};++count;}return count;}
+static void finish_recruit(Duel *d,unsigned side,unsigned index){DuelPlayer *p=&d->players[side];int zone=empty_zone(p->monsters);if(!special_summon_allowed_for(d,side)||zone<0||index>=p->deck_count)return;DuelCardState recruited=take_pile_card(p,PILE_DECK,index);unsigned card=recruited.card;DuelSlot *s=&p->monsters[zone];clear(s,sizeof(*s));s->card=card;s->owner=side;s->position=DUEL_FACEUP_ATTACK;s->summoned_turn=d->turn;s->properly_summoned=1;s->return_controller=DUEL_NO_SLOT;slot_install_state(d,s,recruited);s->properly_summoned=1;special_summon_success(d,side,zone);event(d,DUEL_EVENT_REVIVE,side,zone,card,0);
+    /* These recruiters resolve within the damage step after battle
+       destruction. They do not open a Torrential Tribute summon window. */
+}

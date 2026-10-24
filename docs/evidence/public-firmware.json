@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "bda_sha256": "2ed299631fcbb0c7a04a04230e4ead27346e5a0e7375b00b0cee73a244509382",
+  "elf_sha256": "77b7617153f8ffa46805258bd893b98232f6dbc535f243225054fca7741b95f3",
+  "sdk_commit": "067fe072477861dfc8949d7b1a55279fb92d2548",
+  "bda_bytes": 529280,
+  "scope": "Exact public code-only BDA, with private compatible resource packs in the dedicated full H1 firmware NAND. Desktop launch, menu/About, four editor panes, actual summon, opponent AI pause/resume, normal exit and save preservation. A complete unfiltered game was not repeated for this visual-only variant.",
+  "display": [
+    480,
+    272
+  ],
+  "ordinary_input_only": true,
+  "game_ram_written": false,
+  "physical_h1_tested": false,
+  "code_identity_bytes_checked": 498428,
+  "main_fusion_side_owned_verified": true,
+  "about_verified": true,
+  "deck_edits_made": false,
+  "successful_player_summon": 1099,
+  "opponent_ai_paused_and_resumed": true,
+  "normal_exit_status": 9,
+  "audio_game_volume_percent": 10,
+  "audio_error_counters": {
+    "underruns": 0,
+    "codec_failures": 0,
+    "submit_failures": 0,
+    "last_error": 0
+  },
+  "six_saves_unchanged_byte_for_byte": true,
+  "emulator_stopped": true,
+  "reference_bda_sha256": "0205b78eaff6ae4b77b091222fca9e54c6c5b6cdec04014428e56f0df7e6b31b",
+  "bda_differences_limited_to_two_pixel_regions": true,
+  "changed_bytes_outside_pixel_regions": 0,
+  "native_entry_and_text_identical_to_reference": true,
+  "proof_sha256": {
+    "deployment.json": "0fb9de61c0ce0ec2204fdd9b43aa1c29a22ca79e73490b7ad86eaacf78d8fce8",
+    "code-identity.json": "749bc3cf294ecdafebeec8936d1af3311027c609cbdebd6c48c785b1b704b298",
+    "menu-deck.json": "25f9577de8325b3d651a44ad494c82e41de9a7c65ff90a5fd04895897ab478ae",
+    "controls/result.json": "c977d8c992c4c7b9d773c41d29c4722b6b082c04f8778a38e5595b0c70bc997e"
+  },
+  "screenshots_sha256": {
+    "menu.png": "bba4f79c28b7a13520e2d066793ef0914fb7f2fc1e1607ba96bcde96a891af1a",
+    "deck-main.png": "98c5faf2198bbda85910589d4878b7a12a90e3197d4a1f1cfe0685cf926861b4",
+    "about.png": "411601cc47eb5c6c8cc0efb80801ffe3d8458377e1c0cdea5f08a5debb0f2045",
+    "controls/summoned.png": "cad9f1d9de6ffc14a6fbad3bdba6d26a69ef5c9a0f5b6b41085343a3365fd0ae"
+  }
+}
