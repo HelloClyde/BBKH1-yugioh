@@ -6,7 +6,7 @@
 
 ## 快速开始
 
-当前版本 **0.1.0，发布准备阶段**；尚未创建远程仓库或公开 Release。本地构建后可在 `dist/JOEY.bda` 和 `dist/BBKH1-yugioh-v0.1.0-code-only.zip` 取得程序。
+当前源码版本 **0.1.0**。程序与安装包通过本仓库的 [Releases 页面](https://github.com/HelloClyde/BBKH1-yugioh/releases)分发，版本以预发布形式提供。本地构建后也可在 `dist/JOEY.bda` 和 `dist/BBKH1-yugioh-v0.1.0-code-only.zip` 取得程序。
 
 **源码和公开安装包不含商业游戏素材、汉化资源、音乐或宋体字库。** 需要自行提供已准备的兼容资源包；仅有原版 PC 安装目录不能直接运行。当前导入工具接受已经转换好的 H1 资源，尚未提供从原版 PC 安装包到全部资源的独立转换流程。来源及兼容版本哈希见 [ASSET_SOURCES.md](ASSET_SOURCES.md) 和 [资源说明](docs/RESOURCES.md)。
 
@@ -69,7 +69,7 @@ H1 使用 MIPS ABI。9588 的 SDK/ARM 构建产物不能替代本项目所固定
 
 [验证记录](docs/VALIDATION.md) 区分主机、MIPS CPU、完整固件模拟器与真机。CI 不包含私人固件；成功编译不能视为真机通过。
 
-[GitHub Actions](.github/workflows/build.yml) 对 main、PR 和手动运行进行构建验证并上传 artifacts；`v<版本>` 标签在构建通过后发布 **prerelease**。发布包只含程序、说明、许可证和每个文件的 SHA-256。标签必须匹配 `VERSION`，发布已有同名 Release 时拒绝覆盖。当前 workflow 尚未在远程运行。具体步骤见 [发布说明](docs/RELEASING.md)。
+[GitHub Actions](.github/workflows/build.yml) 对 main、PR 和手动运行进行构建验证并上传 artifacts；`v<版本>` 标签在构建通过后发布 **prerelease**。发布包只含程序、说明、许可证和每个文件的 SHA-256。标签必须匹配 `VERSION`，发布已有同名 Release 时拒绝覆盖。实际运行结果见 [Actions 页面](https://github.com/HelloClyde/BBKH1-yugioh/actions)。具体步骤见 [发布说明](docs/RELEASING.md)。
 
 ## 感谢
 

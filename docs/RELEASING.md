@@ -1,6 +1,6 @@
 # 发布约定
 
-本地项目名称 `BBKH1-yugioh`，初始版本 `0.1.0`，标签 `v0.1.0`。尚未配置应用仓库远程地址、推送标签或运行 GitHub Actions。
+公开仓库：[HelloClyde/BBKH1-yugioh](https://github.com/HelloClyde/BBKH1-yugioh)。初始版本 `0.1.0`，标签 `v0.1.0`；实际构建与发布状态分别以仓库 Actions 和 Releases 页面为准。
 
 ## 从干净检出构建
 
