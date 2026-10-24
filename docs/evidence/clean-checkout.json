@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "tested_source_commit": "507847fe3dde9de03cadf5a5bc2a7d0a048b5710",
+  "sdk_commit": "067fe072477861dfc8949d7b1a55279fb92d2548",
+  "sdk_retrieved_from_public_remote": true,
+  "clean_tracked_checkout": true,
+  "private_game_resource_directory_present": false,
+  "original_executable_loaded": false,
+  "physical_h1_tested": false,
+  "python": "3.11.5",
+  "compiler": "mipsel-none-elf-gcc.exe (GCC) 15.2.0",
+  "host_compiler": "gcc.exe (Rev5, Built by MSYS2 project) 16.1.0",
+  "toolchain_archive_sha256": "8ba866e25c9826ee04ab4310365d264e3e73769e3738bb58ae38fd6740b7ee8d",
+  "host_tests": {
+    "duel": {
+      "checks": 1454892,
+      "failures": 0,
+      "compile_seconds": 34.91623799991794,
+      "execution_seconds": 1.5546355000697076
+    },
+    "profile": {
+      "checks": 4691,
+      "failures": 0,
+      "compile_seconds": 12.050565199926496,
+      "execution_seconds": 0.06856760010123253
+    }
+  },
+  "mips_profile_checks": 4691,
+  "bda_sha256": "2ed299631fcbb0c7a04a04230e4ead27346e5a0e7375b00b0cee73a244509382",
+  "elf_sha256": "77b7617153f8ffa46805258bd893b98232f6dbc535f243225054fca7741b95f3",
+  "bda_bytes": 529280,
+  "repeat_bda_and_elf_identical": true,
+  "source_inputs_match_delivery_repository": true,
+  "package_hashes_and_inventory_verified": true,
+  "source_only_ci_entrypoint": "python tools/ci.py --cc <host-gcc>",
+  "remote_actions_run": false,
+  "notes": "The cache supplied only the exact checksum-verified toolchain ZIP. Application sources and pinned SDK came from clean Git checkouts. No original game packs, firmware, saves or generated application objects were copied into this checkout before building."
+}
