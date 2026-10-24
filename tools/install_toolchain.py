@@ -21,7 +21,10 @@ def main():
     if os.name != 'nt':
         raise SystemExit('The pinned binary toolchain is for Windows; native MIPS GCC 15.2.0 may be supplied separately on other hosts')
     archive = a.archive or ROOT / '.tools/g++-mipsel-none-elf-15.2.0.zip'
-    archive.parent.mkdir(parents=True, exist_ok=True)
+    if a.archive and not archive.is_file():
+        raise FileNotFoundError('--archive must name an existing downloaded toolchain ZIP')
+    if not a.archive:
+        archive.parent.mkdir(parents=True, exist_ok=True)
     if not archive.is_file():
         temporary = archive.with_suffix('.download')
         with urllib.request.urlopen(URL, timeout=60) as response, temporary.open('wb') as f:

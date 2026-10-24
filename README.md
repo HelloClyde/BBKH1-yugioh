@@ -14,7 +14,7 @@
 
 方向键移动焦点，确认键选择，ESC 返回，空格打开/关闭卡片详情，SHIFT+ESC 正常退出。也可触摸卡片和按钮；触摸棋盘左边的阶段图标推进阶段，最下面的结束阶段按钮结束回合。存在连锁或待选择效果时先完成该选择。音量默认 10%。主菜单支持单人决斗、组牌和关于；组牌包含主卡组、融合卡组、副卡组、持有卡。
 
-开发构建使用 Windows x64、Python 3.12 或更高版本、Git 和下列命令（PowerShell）：
+开发构建使用 Windows x64、Python 3.11 或更高版本、Git 和下列命令（PowerShell）：
 
 ```powershell
 git submodule update --init sdk
@@ -58,7 +58,7 @@ python tools/build.py --assets .local-assets --out build/local-game
 | --- | --- |
 | 运行 | BBK H1 / Y100 V1.41，480×272；五个自行提供的兼容资源文件 |
 | SDK | [bbk-h1-bda-sdk](https://github.com/MrDefinition1999/bbk-h1-bda-sdk)，`sdk/` 固定提交 `067fe072477861dfc8949d7b1a55279fb92d2548` |
-| 程序构建 | Windows x64、Git、Python ≥3.12、MIPS GCC 15.2.0；Pillow 12.3.0、pyelftools 0.33 |
+| 程序构建 | Windows x64、Git、Python ≥3.11（本地实测 3.11.5）、MIPS GCC 15.2.0；Pillow 12.3.0、pyelftools 0.33 |
 | 主机回归 | GCC，验证环境为 MSYS2 UCRT64；无需游戏资源 |
 | MIPS CPU 回归 | Unicorn 2.1.4；无需固件和原 PC 程序 |
 | 完整固件验证 | 自备匹配的 H1 固件/NAND 和支持 `bbkh1` 的模拟器，仅在独立副本运行；固件不随仓库分发 |
