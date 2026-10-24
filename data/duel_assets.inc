@@ -3,6 +3,7 @@ typedef struct {uint16_t texture,flags,attack,defense;uint32_t name,description;
 typedef struct {uint32_t key,stamp;uint16_t palette[256];uint8_t pixels[36*52];} NativeMini;
 static h1_file *native_file;
 static h1_file *native_art_file;
+static unsigned native_resource_drive;
 static uint32_t native_art_header[8];
 static uint16_t native_wood[181*32],native_paper[32*32];
 static uint16_t native_life_pixels[2][116*9];
@@ -19,10 +20,10 @@ static int native_stat_focus=-1;
 
 static int native_load(void){
     if(native_attempted)return native_ready;native_attempted=1;
-    native_file=h1_fopen("A:\\JOEY\\H1UI.PAK","rb");if(!native_file)native_file=h1_fopen("B:\\JOEY\\H1UI.PAK","rb");if(!native_file)return 0;
+    native_file=JOEY_OPEN_RESOURCE("H1UI.PAK",&native_resource_drive);if(!native_file)return 0;
     if(h1_fread(native_header,4,18,native_file)!=18||native_header[0]!=0x4955594au||native_header[1]!=0x31303030u||native_header[2]!=3||native_header[3]!=1115||native_header[10]!=480||native_header[11]!=272)return 0;
     h1_fseek(native_file,native_header[5],H1_SEEK_SET);if(h1_fread(native_cards,20,1115,native_file)!=1115)return 0;
-    native_art_file=h1_fopen("B:\\JOEY\\H1ART.PAK","rb");if(!native_art_file)native_art_file=h1_fopen("A:\\JOEY\\H1ART.PAK","rb");
+    native_art_file=JOEY_OPEN_RESOURCE("H1ART.PAK",0);
     if(!native_art_file)return 0;
     if(h1_fread(native_art_header,4,8,native_art_file)!=8||native_art_header[0]!=0x5241594au||native_art_header[1]!=0x31303054u||native_art_header[2]!=2||native_art_header[3]!=480||native_art_header[4]!=272||native_art_header[5]!=3||native_art_header[6]!=32)return 0;
     h1_fseek(native_art_file,native_art_header[7],H1_SEEK_SET);

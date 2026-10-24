@@ -6,11 +6,11 @@
 
 ## 快速开始
 
-当前源码版本 **0.1.0**。程序与安装包通过本仓库的 [Releases 页面](https://github.com/HelloClyde/BBKH1-yugioh/releases)分发，版本以预发布形式提供。本地构建后也可在 `dist/JOEY.bda` 和 `dist/BBKH1-yugioh-v0.1.0-code-only.zip` 取得程序。
+当前源码版本 **0.1.1**。程序与安装包通过本仓库的 [Releases 页面](https://github.com/HelloClyde/BBKH1-yugioh/releases)分发，版本以预发布形式提供。本地构建后也可在 `dist/JOEY.bda` 和 `dist/BBKH1-yugioh-v0.1.1-code-only.zip` 取得程序。
 
-**源码和公开安装包不含商业游戏素材、汉化资源、音乐或宋体字库。** 需要自行提供已准备的兼容资源包；仅有原版 PC 安装目录不能直接运行。当前导入工具接受已经转换好的 H1 资源，尚未提供从原版 PC 安装包到全部资源的独立转换流程。来源及兼容版本哈希见 [ASSET_SOURCES.md](ASSET_SOURCES.md) 和 [资源说明](docs/RESOURCES.md)。
+**源码和 code-only 程序包不含商业游戏素材、汉化资源、音乐或宋体字库。** 兼容资源另以 Release 的 `BBKH1-yugioh-v0.1.1-resources.zip` 提供，不加入 Git；也可自行提供符合清单的资源。仅有原版 PC 安装目录不能直接运行。当前导入工具接受已经转换好的 H1 资源，尚未提供从原版 PC 安装包到全部资源的独立转换流程。来源及兼容版本哈希见 [ASSET_SOURCES.md](ASSET_SOURCES.md) 和 [资源说明](docs/RESOURCES.md)。
 
-安装时，将自行准备的五个文件放入存储卡 `B:\JOEY\`：`FONT.BIN`、`H1UI.PAK`、`H1ART.PAK`、`H1SND.PAK`、`H1SCN.PAK`。程序复制到 `A:\应用\程序\游戏王.bda`，刷新桌面后从游戏分类启动“游戏王”。没有 B: 时也可使用 `A:\JOEY\`。保留已有的 `JNAT0.SAV` 和 `JNAT1.SAV`；更新程序不需要覆盖存档。
+将程序包和资源包解压到 A 盘根目录，程序位于 `A:\应用\程序\游戏王.bda`，五个资源位于 `A:\应用\数据\yugioh\`：`FONT.BIN`、`H1UI.PAK`、`H1ART.PAK`、`H1SND.PAK`、`H1SCN.PAK`。资源包也可解压到 B 盘根目录，使用同路径 `B:\应用\数据\yugioh\`；程序优先读取 A 盘。刷新桌面后从游戏分类启动“游戏王”。存档写入选中的资源目录；新目录尚无存档时兼容读取旧 `A:\JOEY\JNAT0.SAV` 和 `JNAT1.SAV`，保留旧文件。
 
 方向键移动焦点，确认键选择，ESC 返回，空格打开/关闭卡片详情，SHIFT+ESC 正常退出。也可触摸卡片和按钮；触摸棋盘左边的阶段图标推进阶段，最下面的结束阶段按钮结束回合。存在连锁或待选择效果时先完成该选择。音量默认 10%。主菜单支持单人决斗、组牌和关于；组牌包含主卡组、融合卡组、副卡组、持有卡。
 
@@ -33,7 +33,7 @@ python tools/verify_dist.py
 python tools/ci.py --cc C:/msys64/ucrt64/bin/gcc.exe
 ```
 
-该命令运行完整规则/存档测试、MIPS 存档测试、两次独立目录构建、BDA 校验及安装包哈希检查。完整 MIPS 规则回归可另行运行 `python tools/test_mips.py --suite duel`，它比主机测试慢。
+该命令运行完整规则/存档测试、MIPS 存档测试、中文资源路径与 A/B 回退测试、两次独立目录构建、BDA 校验及安装包哈希检查。完整 MIPS 规则回归可另行运行 `python tools/test_mips.py --suite duel`，它比主机测试慢。
 
 需要本地完整包时，使用自己的兼容资源目录：
 
@@ -42,7 +42,7 @@ python tools/import_assets.py <准备好的JOEY目录>
 python tools/build.py --assets .local-assets --out build/local-game
 ```
 
-`build/local-game/install/JOEY/` 会包含程序及五个本地资源。若导入目录还含哈希相符的参考 BDA，可加 `--visuals reference` 重建原来角色图标和剑形指示；该构建应与参考 BDA 逐字节一致。默认公开构建使用本项目生成的几何图标和指示图像，不携带这些第三方像素。不要将 `.local-assets/` 或完整资源包加入 Git。
+`build/local-game/install/应用/程序/` 包含程序，`build/local-game/install/应用/数据/yugioh/` 包含五个本地资源。若导入目录还含哈希相符的参考 BDA，可加 `--visuals reference` 重建原来角色图标和剑形指示；仅历史 `0.1.0` 版本要求与参考 BDA 逐字节一致。默认公开构建使用本项目生成的几何图标和指示图像，不携带这些第三方像素。不要将 `.local-assets/` 或完整资源包加入 Git。
 
 ## 截图
 
@@ -56,7 +56,7 @@ python tools/build.py --assets .local-assets --out build/local-game
 
 | 用途 | 依赖 |
 | --- | --- |
-| 运行 | BBK H1 / Y100 V1.41，480×272；五个自行提供的兼容资源文件 |
+| 运行 | BBK H1 / Y100 V1.41，480×272；Release 资源包或五个自行提供的兼容资源文件 |
 | SDK | [bbk-h1-bda-sdk](https://github.com/MrDefinition1999/bbk-h1-bda-sdk)，`sdk/` 固定提交 `067fe072477861dfc8949d7b1a55279fb92d2548` |
 | 程序构建 | Windows x64、Git、Python ≥3.11（本地实测 3.11.5）、MIPS GCC 15.2.0；Pillow 12.3.0、pyelftools 0.33 |
 | 主机回归 | GCC，验证环境为 MSYS2 UCRT64；无需游戏资源 |
@@ -69,7 +69,7 @@ H1 使用 MIPS ABI。9588 的 SDK/ARM 构建产物不能替代本项目所固定
 
 [验证记录](docs/VALIDATION.md) 区分主机、MIPS CPU、完整固件模拟器与真机。CI 不包含私人固件；成功编译不能视为真机通过。
 
-[GitHub Actions](.github/workflows/build.yml) 对 main、PR 和手动运行进行构建验证并上传 artifacts；`v<版本>` 标签在构建通过后发布 **prerelease**。发布包只含程序、说明、许可证和每个文件的 SHA-256。标签必须匹配 `VERSION`，发布已有同名 Release 时拒绝覆盖。实际运行结果见 [Actions 页面](https://github.com/HelloClyde/BBKH1-yugioh/actions)。具体步骤见 [发布说明](docs/RELEASING.md)。
+[GitHub Actions](.github/workflows/build.yml) 对 main、PR 和手动运行进行构建验证并上传 artifacts；`v<版本>` 标签在构建通过后发布 **prerelease**。自动发布的程序包只含程序、说明、许可证和每个文件的 SHA-256；另行提供的资源包仅附加到 Release。标签必须匹配 `VERSION`，发布已有同名 Release 时拒绝覆盖。实际运行结果见 [Actions 页面](https://github.com/HelloClyde/BBKH1-yugioh/actions)。具体步骤见 [发布说明](docs/RELEASING.md)。
 
 ## 感谢
 

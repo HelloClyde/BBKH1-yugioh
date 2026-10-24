@@ -1,6 +1,7 @@
 /* Direct H1 PCM services: streamed original music plus two finite effect
  * channels. No Win32, PC sound code, floating point, or audio register writes. */
 #include "h1_sdk.h"
+#include "duel_paths.h"
 #include "duel_audio.h"
 #include "duel_ima.h"
 #include <stddef.h>
@@ -60,8 +61,7 @@ static int cancel_music(void){
     return 1;
 }
 static int load_pack(void){
-    audio_file=h1_fopen("A:\\JOEY\\H1SND.PAK","rb");joey_audio_diagnostic[24]=0;
-    if(!audio_file){audio_file=h1_fopen("B:\\JOEY\\H1SND.PAK","rb");joey_audio_diagnostic[24]=1;}
+    unsigned resource_drive=0;audio_file=JOEY_OPEN_RESOURCE("H1SND.PAK",&resource_drive);joey_audio_diagnostic[24]=resource_drive;
     if(!audio_file)return 0;uint32_t header[8];
     h1_fseek(audio_file,0,H1_SEEK_END);unsigned size=h1_ftell(audio_file);h1_fseek(audio_file,0,H1_SEEK_SET);
     if(size!=JOEY_AUDIO_PACK_BYTES||h1_fread(header,4,8,audio_file)!=8||header[0]!=0x59454f4au||header[1]!=0x31444e53u||header[2]!=1||header[3]!=JOEY_AUDIO_ASSET_COUNT||header[4]!=AUDIO_RATE||header[5]!=JOEY_IMA_BLOCK_BYTES||header[6]!=32)return 0;

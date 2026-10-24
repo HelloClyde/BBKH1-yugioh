@@ -68,6 +68,7 @@ jobs:
             build/host/tests.json
             build/mips-tests/profile/tests.json
             build/native/validation.json
+            build/path-tests/tests.json
           if-no-files-found: error
           retention-days: 14
 

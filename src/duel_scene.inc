@@ -2,7 +2,7 @@
 #include "duel_attack_assets.h"
 static h1_file *scene_file;
 static int scene_load(void){
-    uint32_t header[8];scene_file=h1_fopen("B:\\JOEY\\H1SCN.PAK","rb");if(!scene_file)scene_file=h1_fopen("A:\\JOEY\\H1SCN.PAK","rb");
+    uint32_t header[8];scene_file=JOEY_OPEN_RESOURCE("H1SCN.PAK",0);
     return scene_file&&h1_fread(header,4,8,scene_file)==8&&header[0]==0x4353594au&&header[1]==0x3130304eu&&header[2]==1&&header[3]==2&&header[4]==480&&header[5]==272&&header[6]==32&&h1_fseek(scene_file,0,H1_SEEK_END)==522272;
 }
 static void scene_background(unsigned key){

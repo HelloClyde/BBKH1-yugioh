@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "bda_sha256": "cc1b8a8afc6f8c82b1556d9dcbecadf1c583ee796f78ace7fd980d8054581571",
+  "elf_sha256": "fa25143366c0dd220ab54a08ed02aa678450933c4d2f2227da1516bcefac10c4",
+  "a_resource_path": "A:/应用/数据/yugioh",
+  "a_resource_path_firmware_tested": true,
+  "b_resource_path_firmware_tested": false,
+  "ordinary_input_only": true,
+  "game_ram_written": false,
+  "main_about_and_four_editor_panes": true,
+  "legacy_save_loaded": true,
+  "save_sequence_before": 76,
+  "save_sequence_after": 77,
+  "new_save_written_and_reopened": true,
+  "audio_error_counters": {
+    "underruns": 0,
+    "codec_failures": 0,
+    "submit_failures": 0,
+    "last_error": 0
+  },
+  "physical_h1_tested": false,
+  "version": "0.1.1",
+  "scope": "Exact code-only BDA in dedicated full H1 firmware emulator. A resource directory, legacy save read, new save write/reopen, menu/About/four editor panes, ordinary summon, AI pause/resume and normal exit. B fallback is covered by host C path tests only.",
+  "code_identity_bytes_checked": 498860,
+  "successful_player_summon": 239,
+  "opponent_ai_paused_and_resumed": true,
+  "normal_exit_status": 9,
+  "six_old_saves_unchanged": true,
+  "new_save_directory_verified_offline": true,
+  "new_saves": {
+    "/应用/数据/yugioh/jnat0.sav": {
+      "bytes": 1377,
+      "sha256": "1d0fd25e25702dd5285904f30668440d65cf843541a7dac04de171a2ce594446"
+    }
+  },
+  "resource_path_host_checks": 50,
+  "emulator_stopped": true,
+  "screenshots_visually_checked": [
+    "deck-main.png",
+    "controls/summoned.png"
+  ]
+}

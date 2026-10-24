@@ -16,6 +16,7 @@ def main():
             print(output, flush=True)
     tc = ['--toolchain', a.toolchain.resolve()] if a.toolchain else []
     call('check_repository.py')
+    call('test_resource_paths.py', *(['--cc', a.cc] if a.cc else []))
     call('test_host.py', *(['--cc', a.cc] if a.cc else []))
     call('test_mips.py', *tc)
     call('build.py', *tc, '--out', ROOT / 'build/native')
@@ -29,6 +30,7 @@ def main():
     write_json(ROOT / 'build/ci-verification.json', {
         'passed': True, 'host': read_json(ROOT / 'build/host/tests.json')['suites'],
         'mips_profile_checks': read_json(ROOT / 'build/mips-tests/profile/tests.json')['checks'],
+        'resource_path_checks': read_json(ROOT / 'build/path-tests/tests.json')['checks'],
         'bda_sha256': sha(one / 'JOEY.bda'), 'elf_sha256': sha(one / 'JOEY.elf'),
         'repeat_bda_and_elf_identical': True, 'package_hashes_verified': True,
         'sdk_commit': read_json(one / 'build.json')['sdk_commit'],

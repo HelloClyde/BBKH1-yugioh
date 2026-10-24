@@ -24,7 +24,7 @@ uint32_t native_font_text(uint16_t *dest,uint32_t w,uint32_t h,int32_t x,int32_t
     /* Original text sprites also provide pixel hit masks for buttons. Keep
      * rasterizing them even though the visible H1 screens are independent. */
     unsigned height=options&65535;if(height<8)height=8;if(height>32)height=32;
-    if(!font_file){uint8_t header[16];font_file=h1_fopen("B:\\JOEY\\FONT.BIN","rb");if(!font_file)font_file=h1_fopen("A:\\JOEY\\FONT.BIN","rb");if(!font_file)return 0;
+    if(!font_file){uint8_t header[16];font_file=JOEY_OPEN_RESOURCE("FONT.BIN",0);if(!font_file)return 0;
         if(h1_fread(header,1,16,font_file)!=16||header[0]!='J'||u32(header+8)!=1||u32(header+12)!=25)return 0;
         if(h1_fread(font_desc,20,25,font_file)!=25)return 0;}
     const uint32_t *desc=font_desc[height-8];

@@ -1,6 +1,7 @@
 /* Direct H1 frontend for the semantic C rules engine. */
 #include <stddef.h>
 #include "h1_sdk.h"
+#include "duel_paths.h"
 #include "duel.h"
 #include "duel_profile.h"
 #include "duel_opening.h"
@@ -52,7 +53,11 @@ static unsigned hand_scroll,gallery_card=1;
 static uint32_t next_ai,notice_until;
 static uint32_t seen_remodel;
 static const uint16_t *notice;
-static const char *profile_paths[]={"A:\\JOEY\\JNAT0.SAV","A:\\JOEY\\JNAT1.SAV"};
+static const char *const profile_roots[][2]={
+    {JOEY_RESOURCE_ROOT_A "JNAT0.SAV",JOEY_RESOURCE_ROOT_A "JNAT1.SAV"},
+    {JOEY_RESOURCE_ROOT_B "JNAT0.SAV",JOEY_RESOURCE_ROOT_B "JNAT1.SAV"}};
+static const char *const legacy_profile_paths[]={"A:\\JOEY\\JNAT0.SAV","A:\\JOEY\\JNAT1.SAV"};
+static const char *const *profile_paths=profile_roots[0];
 static uint8_t profile_bytes[JOEY_PROFILE_SAVE_BYTES];
 static int profile_slot=-1;
 static unsigned profile_valid_mask,profile_save_result;
@@ -77,7 +82,7 @@ static int key_held(unsigned scan){
     return ((int (*)(unsigned))function)(scan)!=0;
 }
 static int font_assets_valid(void){
-    h1_file *f=h1_fopen("B:\\JOEY\\FONT.BIN","rb");if(!f)f=h1_fopen("A:\\JOEY\\FONT.BIN","rb");if(!f)return 0;uint32_t header[4],books[25][5];
+    h1_file *f=JOEY_OPEN_RESOURCE("FONT.BIN",0);if(!f)return 0;uint32_t header[4],books[25][5];
     int valid=h1_fread(header,4,4,f)==4&&header[0]==0x59454f4au&&header[1]==0x31544e46u&&header[2]==1&&header[3]==25&&h1_fread(books,20,25,f)==25;
     for(unsigned i=0;valid&&i<25;++i)if(books[i][0]!=i+8||books[i][4]!=DUEL_FONT_GLYPHS)valid=0;
     if(valid&&h1_fseek(f,0,H1_SEEK_END)!=DUEL_FONT_ASSET_BYTES)valid=0;h1_fclose(f);return valid;
@@ -128,9 +133,14 @@ static int profile_read(unsigned slot,JoeyProfile *out,unsigned *exists){
     if(valid&&length==JOEY_PROFILE_V2_BYTES)out->reward_gauge=DUEL_ORIGINAL_REWARD_GAUGE;return valid;
 }
 static void profile_load(void){
+    profile_paths=profile_roots[native_resource_drive];
     joey_profile_init(&joey_profile_state,duel_original_owned,duel_original_deck,DUEL_ORIGINAL_DECK_COUNT,duel_original_fusion_deck,DUEL_ORIGINAL_FUSION_DECK_COUNT);
     joey_profile_state.reward_gauge=DUEL_ORIGINAL_REWARD_GAUGE;
-    JoeyProfile a,b;unsigned exists=0;int va=profile_read(0,&a,&exists),vb=profile_read(1,&b,&exists);profile_valid_mask=va|(vb<<1);profile_slot=joey_profile_newest(&a,va,&b,vb);
+    JoeyProfile a,b;unsigned exists=0;int va=profile_read(0,&a,&exists),vb=profile_read(1,&b,&exists);
+    /* Read old A:\JOEY saves only when the selected new folder has no saves.
+     * The next ordinary save goes to the new folder, preserving old files. */
+    if(!exists){const char *const *selected=profile_paths;profile_paths=legacy_profile_paths;va=profile_read(0,&a,&exists);vb=profile_read(1,&b,&exists);profile_paths=selected;}
+    profile_valid_mask=va|(vb<<1);profile_slot=joey_profile_newest(&a,va,&b,vb);
     if(profile_slot>=0)joey_profile_state=profile_slot?b:a;else if(exists)message(u"存档校验失败，已载入初始牌组");
 }
 static void profile_message(int result){
@@ -671,8 +681,8 @@ int h1_app_main(void){
     const uint32_t *query=h1_runtime_entry(h1_runtime_table(H1_RUNTIME_GUI_TABLE_SLOT),0x9d8u);
     native_keyboard=query&&query[0]==0x27bdffe8u&&query[1]==0xafbf0010u&&query[2]==0x0c00208du&&!query[3];
     if(!native_load()){h1_timer_stop();h1_message_box(0,"Missing H1UI/H1ART assets","Joey",0);return 1;}
-    if(!font_assets_valid()){h1_timer_stop();h1_message_box(0,"Please update JOEY/FONT.BIN","Joey",0);return 1;}
-    if(!scene_load()){h1_timer_stop();h1_message_box(0,"Please update JOEY/H1SCN.PAK","Joey",0);return 1;}
+    if(!font_assets_valid()){h1_timer_stop();h1_message_box(0,"Please update yugioh/FONT.BIN","Joey",0);return 1;}
+    if(!scene_load()){h1_timer_stop();h1_message_box(0,"Please update yugioh/H1SCN.PAK","Joey",0);return 1;}
     profile_load();joey_audio_open();
     if(joey_profile_state.reward_flags&JOEY_REWARD_PENDING)result_resume();
     while(!exit_requested){

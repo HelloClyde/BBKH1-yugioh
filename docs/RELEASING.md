@@ -13,13 +13,13 @@
 确定远程仓库所有者、名称、可见性和发布授权后再创建仓库并推送。先检查同名仓库、tag、Release，避免覆盖已有项目。
 
 1. 推送经过本地验证的 main 提交，等待 main 构建通过。
-2. 核对 `VERSION`，创建指向同一提交的 `v0.1.0` 标签并推送。
+2. 核对 `VERSION`，创建指向同一提交的 `v<版本>` 标签并推送。
 3. 等待标签构建。release job 使用 build job 同一次构建上传的 artifact；不重新编译。
 4. 下载 artifact 后按每个文件的 SHA-256 检查；发布时使用该次的 BDA、ZIP、manifest、说明与校验清单。
 5. 检查 Release 为 prerelease，逐个下载并复核哈希，记录 tag 提交、Actions 和 Release URL。
 
 CI 默认只有 contents:read；发布 job 单独 contents:write。main/PR/manual 只生成临时 artifacts。发布正文取自 UTF-8 `RELEASE_NOTES.md`。脚本不使用 `--clobber`；已有同名 Release 时停止，先确认它是否为同一次发布。
 
-计划公开资产为 `JOEY.bda`、`BBKH1-yugioh-v0.1.0-code-only.zip`、`build-manifest.json`、`RELEASE_NOTES.md`、`SHA256SUMS.txt`。不会上传本地完整资源 ZIP、SDK 工具链、固件、原 PC 程序或存档。公开包需使用者另备兼容资源，这一限制必须保留在 Release 正文。
+自动发布资产为 `JOEY.bda`、`BBKH1-yugioh-v<版本>-code-only.zip`、`build-manifest.json`、`RELEASE_NOTES.md`、`SHA256SUMS.txt`。`v0.1.1` 另附资源 ZIP 和 `RESOURCES-SHA256SUMS.txt`，ZIP 只含五个兼容资源，目录为 `应用/数据/yugioh/`；资源不加入 Git。不上传 SDK 工具链、固件、原 PC 程序或存档。
 
 Actions 依赖在 2026-10-24 对照官方仓库确认接口并固定到提交。构建 job 可在没有商业资源/私人固件的环境运行；不能据此声称完整固件或真机验证通过。

@@ -12,9 +12,11 @@ INSTALL = '''游戏王 H1 原生版 — 源码构建包
 适用：步步高 H1 / Y100 V1.41，480×272。
 本包只含程序，不含原游戏图像、汉化文本、音乐或字体。
 需要自行提供兼容的 FONT.BIN、H1UI.PAK、H1ART.PAK、H1SND.PAK、H1SCN.PAK。
-将这五个文件放入 B:\\JOEY\\，并将本包的 JOEY.bda 复制到
-A:\\应用\\程序\\游戏王.bda，然后在游戏分类中启动“游戏王”。
-没有 B: 时资源也可放 A:\\JOEY\\。请保留原有 JNAT0.SAV / JNAT1.SAV。
+资源包解压到 A: 根目录，五个文件位于 A:\\应用\\数据\\yugioh\\。
+也可解压到 B: 根目录，使用 B:\\应用\\数据\\yugioh\\。程序优先读取 A:。
+本程序包解压到 A: 根目录，程序位于 A:\\应用\\程序\\游戏王.bda，
+然后在游戏分类中启动“游戏王”。存档写入所选资源目录。
+首次使用新目录时兼容读取 A:\\JOEY\\ 中的旧 JNAT0.SAV / JNAT1.SAV。
 方向键移动，确认选择，ESC 返回；决斗中触摸左侧阶段图标推进阶段/结束回合。
 SHIFT+ESC 正常退出；默认游戏音量 10%。
 完整说明与资源来源见 README.md / ASSET_SOURCES.md。
@@ -51,14 +53,14 @@ def main():
     write_json(a.out / 'build-manifest.json', manifest)
     notes = ('游戏王 H1 原生版 v' + version + '\n\n'
              '原生 MIPS C；默认音量10%；完整卡牌效果实现。\n'
-             '此预发布只分发程序，运行所需的第三方资源包需由使用者自行提供。\n'
+             '程序包与资源包分开提供。资源解压到 A: 或 B: 根目录，形成 应用/数据/yugioh；优先读取 A:。\n'
              'CI 运行主机完整效果回归、MIPS 存档回归、BDA 静态校验及两次构建一致性检查；'
              'CI 不运行完整 H1 固件，历史完整固件记录的适用哈希见 docs/VALIDATION.md。\n'
              '程序 SHA-256：' + report['bda_sha256'] + '\n')
     (a.out / 'RELEASE_NOTES.md').write_text(notes, encoding='utf-8')
     archive = a.out / ('BBKH1-yugioh-v' + version + '-code-only.zip')
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        add(z, 'JOEY/JOEY.bda', (a.build / 'JOEY.bda').read_bytes())
+        add(z, '应用/程序/游戏王.bda', (a.build / 'JOEY.bda').read_bytes())
         add(z, '安装说明.txt', INSTALL.encode('utf-8'))
         for name in ('LICENSE', 'NOTICE', 'README.md', 'ASSET_SOURCES.md'):
             add(z, name, (ROOT / name).read_bytes())

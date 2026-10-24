@@ -26,9 +26,9 @@ def main():
     if {p.name for p in a.folder.iterdir()} != expected_names | {'SHA256SUMS.txt'}:
         raise ValueError('Release folder contains unlisted files; use a fresh output directory')
     with zipfile.ZipFile(a.folder / f"BBKH1-yugioh-v{manifest['version']}-code-only.zip") as z:
-        if set(z.namelist()) != {'JOEY/JOEY.bda', '安装说明.txt', 'LICENSE', 'NOTICE', 'README.md', 'ASSET_SOURCES.md', 'build-manifest.json'}:
+        if set(z.namelist()) != {'应用/程序/游戏王.bda', '安装说明.txt', 'LICENSE', 'NOTICE', 'README.md', 'ASSET_SOURCES.md', 'build-manifest.json'}:
             raise ValueError('Unexpected release ZIP inventory')
-        if z.read('JOEY/JOEY.bda') != (a.folder / 'JOEY.bda').read_bytes():
+        if z.read('应用/程序/游戏王.bda') != (a.folder / 'JOEY.bda').read_bytes():
             raise ValueError('Packaged BDA differs from standalone BDA')
     print('Verified all release hashes, ZIP inventory and BDA identity')
 

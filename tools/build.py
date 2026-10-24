@@ -19,6 +19,7 @@ def main():
     a = p.parse_args()
     out = a.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
+    version = (ROOT / 'VERSION').read_text(encoding='utf-8').strip()
     write_json(out / 'build.json', {'passed': False, 'reason': 'Build in progress'})
     sdk = sdk_commit()
     inputs = source_hashes()
@@ -87,21 +88,25 @@ def main():
         raise ValueError(validation)
     validation.pop('path', None)
     write_json(out / 'validation.json', validation)
-    if a.visuals == 'reference' and sha(bda) != reference['bda_sha256']:
+    if a.visuals == 'reference' and version == '0.1.0' and sha(bda) != reference['bda_sha256']:
         raise ValueError('Reference build is not byte-identical to the verified BDA')
     if source_hashes() != inputs:
         raise ValueError('Source inputs changed during compilation; rebuild from a fixed snapshot')
-    install = out / 'install/JOEY'
+    install = out / 'install'
     install.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(bda, install / bda.name)
-    # Remove resources left over from a previous full build in this output.
+    program = install / '应用/程序/游戏王.bda'
+    program.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(bda, program)
+    resource_folder = install / '应用/数据/yugioh'
+    if a.assets:
+        resource_folder.mkdir(parents=True, exist_ok=True)
     for name in ASSET_NAMES:
-        target = install / name
+        target = resource_folder / name
         if a.assets:
             shutil.copyfile(a.assets / name, target)
         elif target.exists():
             target.unlink()
-    report = {'passed': True, 'version': (ROOT / 'VERSION').read_text(encoding='utf-8').strip(),
+    report = {'passed': True, 'version': version,
               'title': '游戏王', 'sdk_commit': sdk, 'compiler': compiler,
               'bda_sha256': sha(bda), 'bda_bytes': bda.stat().st_size, 'elf_sha256': sha(elf_path),
               'visuals': a.visuals, 'external_resources_included': bool(a.assets),
@@ -110,7 +115,8 @@ def main():
               'entry': '0x83c00020', 'bss_end': hex(end), 'native_mips_code_bytes': code_bytes,
               'duel_state_layout': layouts['joey_duel_layout'], 'duel_state_bytes': layouts['joey_duel_layout'][0],
               'profile_state_layout': layouts['joey_profile_layout'], 'source_hashes': inputs,
-              'files': {p.name: sha(p) for p in sorted(install.iterdir()) if p.is_file()},
+              'resource_search_paths': ['A:/应用/数据/yugioh', 'B:/应用/数据/yugioh'],
+              'files': {'JOEY.bda': sha(bda), **({name: sha(resource_folder / name) for name in ASSET_NAMES} if a.assets else {})},
               'reference_firmware_evidence_applies': sha(bda) == reference['bda_sha256'],
               'firmware_tested_in_this_build': False, 'physical_h1_tested': False}
     write_json(out / 'build.json', report)
