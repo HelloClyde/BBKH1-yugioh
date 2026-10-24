@@ -21,6 +21,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     write_json(out / 'build.json', {'passed': False, 'reason': 'Build in progress'})
     sdk = sdk_commit()
+    inputs = source_hashes()
     gcc, objcopy, compiler = toolchain(a.toolchain)
     generated = out / 'generated'
     generate(generated)
@@ -88,6 +89,8 @@ def main():
     write_json(out / 'validation.json', validation)
     if a.visuals == 'reference' and sha(bda) != reference['bda_sha256']:
         raise ValueError('Reference build is not byte-identical to the verified BDA')
+    if source_hashes() != inputs:
+        raise ValueError('Source inputs changed during compilation; rebuild from a fixed snapshot')
     install = out / 'install/JOEY'
     install.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(bda, install / bda.name)
@@ -106,7 +109,7 @@ def main():
               'original_executable_loaded': False, 'floating_point_instructions': 0,
               'entry': '0x83c00020', 'bss_end': hex(end), 'native_mips_code_bytes': code_bytes,
               'duel_state_layout': layouts['joey_duel_layout'], 'duel_state_bytes': layouts['joey_duel_layout'][0],
-              'profile_state_layout': layouts['joey_profile_layout'], 'source_hashes': source_hashes(),
+              'profile_state_layout': layouts['joey_profile_layout'], 'source_hashes': inputs,
               'files': {p.name: sha(p) for p in sorted(install.iterdir()) if p.is_file()},
               'reference_firmware_evidence_applies': sha(bda) == reference['bda_sha256'],
               'firmware_tested_in_this_build': False, 'physical_h1_tested': False}

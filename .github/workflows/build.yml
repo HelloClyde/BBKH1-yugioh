@@ -102,4 +102,5 @@ jobs:
           fi
           gh release create "$RELEASE_TAG" --verify-tag --prerelease \
             --title "游戏王 H1 $RELEASE_TAG" --notes-file dist/RELEASE_NOTES.md \
-            dist/JOEY.bda dist/*-code-only.zip dist/build-manifest.json dist/RELEASE_NOTES.md dist/SHA256SUMS.txt
+            dist/JOEY.bda "dist/BBKH1-yugioh-${RELEASE_TAG}-code-only.zip" \
+            dist/build-manifest.json dist/RELEASE_NOTES.md dist/SHA256SUMS.txt

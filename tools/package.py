@@ -5,7 +5,7 @@ import re
 import shutil
 import zipfile
 from pathlib import Path
-from common import ROOT, read_json, sha, write_json
+from common import ROOT, read_json, sha, source_hashes, write_json
 
 INSTALL = '''游戏王 H1 原生版 — 源码构建包
 
@@ -38,6 +38,8 @@ def main():
         raise ValueError('Public release packaging requires an open-visuals, code-only build')
     if sha(a.build / 'JOEY.bda') != report['bda_sha256']:
         raise ValueError('BDA identity differs from successful build')
+    if report['source_hashes'] != source_hashes():
+        raise ValueError('Source inputs changed after the build; rebuild before packaging')
     version = (ROOT / 'VERSION').read_text(encoding='utf-8').strip()
     if not re.fullmatch(r'\d+\.\d+\.\d+', version) or version != report['version']:
         raise ValueError('Version mismatch')

@@ -23,6 +23,8 @@ def main():
     expected_names = {'JOEY.bda', 'build-manifest.json', 'RELEASE_NOTES.md', f"BBKH1-yugioh-v{manifest['version']}-code-only.zip"}
     if listed != expected_names or sha(a.folder / 'JOEY.bda') != manifest['bda_sha256']:
         raise ValueError('Release inventory or BDA identity differs')
+    if {p.name for p in a.folder.iterdir()} != expected_names | {'SHA256SUMS.txt'}:
+        raise ValueError('Release folder contains unlisted files; use a fresh output directory')
     with zipfile.ZipFile(a.folder / f"BBKH1-yugioh-v{manifest['version']}-code-only.zip") as z:
         if set(z.namelist()) != {'JOEY/JOEY.bda', '安装说明.txt', 'LICENSE', 'NOTICE', 'README.md', 'ASSET_SOURCES.md', 'build-manifest.json'}:
             raise ValueError('Unexpected release ZIP inventory')
