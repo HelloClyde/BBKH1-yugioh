@@ -27,7 +27,14 @@ def main():
         archive.parent.mkdir(parents=True, exist_ok=True)
     if not archive.is_file():
         temporary = archive.with_suffix('.download')
-        with urllib.request.urlopen(URL, timeout=60) as response, temporary.open('wb') as f:
+        version = (ROOT / 'VERSION').read_text(encoding='utf-8').strip()
+        # The upstream distributor rejects urllib's generic Python user agent.
+        # Identify this project while keeping the exact URL and digest pinned.
+        request = urllib.request.Request(URL, headers={
+            'User-Agent': f'BBKH1-yugioh/{version} (+https://github.com/HelloClyde/BBKH1-yugioh)',
+            'Accept': 'application/octet-stream',
+        })
+        with urllib.request.urlopen(request, timeout=60) as response, temporary.open('wb') as f:
             shutil.copyfileobj(response, f)
         if hashlib.sha256(temporary.read_bytes()).hexdigest() != SHA256:
             raise ValueError('Downloaded toolchain checksum mismatch; untrusted archive was not extracted')
